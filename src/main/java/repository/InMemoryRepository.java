@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.*;
 
-public class StudentRepository{
+public class StudentRepository extends Repository<{
     private ArrayList<Student> studentRepo;
 
     public StudentRepository(){
