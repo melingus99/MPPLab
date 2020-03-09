@@ -1,30 +1,70 @@
 package repository;
 
-import domain.Student;
+import repository.Repository;
+import domain.BaseEntity;
+import domain.validators.Validator;
+import domain.validators.ValidatorException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-public class StudentRepository extends Repository<{
-    private ArrayList<Student> studentRepo;
 
-    public StudentRepository(){
-        studentRepo= new ArrayList<Student>();
+public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Repository<ID, T> {
+
+    private Map<ID, T> entities;
+    private Validator<T> validator;
+
+    public InMemoryRepository(Validator<T> validator) {
+        this.validator = validator;
+        entities = new HashMap<>();
     }
 
-    public List<Student> getStudentRepo(){
-        return studentRepo;
+    @Override
+    public Optional<T> findOne(ID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("id must not be null");
+        }
+        return Optional.ofNullable(entities.get(id));
     }
 
-    public void addStudent(String name){
-        Student student=new Student(name);
-        studentRepo.add(student);
+    @Override
+    public Iterable<T> findAll() {
+        Set<T> allEntities = entities.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
+        return allEntities;
+    }
+
+    @Override
+    public Optional<T> add(T entity) throws ValidatorException {
+        if (entity == null) {
+            throw new IllegalArgumentException("id must not be null");
+        }
+        validator.validate(entity);
+        return Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity));
+    }
+
+    @Override
+    public Optional<T> delete(ID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("id must not be null");
+        }
+        return Optional.ofNullable(entities.remove(id));
+    }
+
+    @Override
+    public Optional<T> update(T entity) throws ValidatorException {
+        if (entity == null) {
+            throw new IllegalArgumentException("entity must not be null");
+        }
+        validator.validate(entity);
+        return Optional.ofNullable(entities.computeIfPresent(entity.getId(), (k, v) -> entity));
     }
 
     @Override
     public String toString(){
-        String str=studentRepo.stream().map(student->student.toString()).reduce("",(s1,s2)->s1+="\n"+s2);
+        String str=entities.entrySet().stream().map(student->student.toString()).reduce("",(s1,s2)->s1+="\n"+s2);
         return str;
     }
 }

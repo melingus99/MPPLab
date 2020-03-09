@@ -2,6 +2,7 @@ package userInterface;
 
 
 import Controller.Controller;
+import domain.Student;
 
 import java.util.Scanner;
 
@@ -16,6 +17,10 @@ public class UI {
     {
         System.out.println("press 1 to add student");
         System.out.println("press 2 to print all students");
+        System.out.println("press 3 to update a student");
+        System.out.println("press 4 to get an entity");
+        System.out.println("press 5 to delete an entity");
+        System.out.println("press 6 to save Student repository");
         System.out.println("press 0 to exit");
     }
 
@@ -30,14 +35,45 @@ public class UI {
             input= scan.nextInt();
             switch (input) {
                 case 1:{
-                    System.out.println("input student name:");
-                    String name=scan2.nextLine();
-                    //controller.validate()
-                    controller.addStudent(name);
+                    System.out.println("type: Id,Student Id,name");
+                    String[] studentStr=scan2.nextLine().split(",");
+                    //Checks If types are valid
+                    controller.addStudent(studentStr);
+                    //throw message if entity id already exists
                     break;
                 }
                 case 2:{
                     System.out.println(controller.PrintStudents());
+                    break;
+                }
+                case 3:{
+                    System.out.println("{entity id,new Student Id,new Student Name}");
+                    String[] studentStr=scan2.nextLine().split(",");
+                    //checks if types are valid
+                    controller.update(studentStr);
+                    //throw message if entity id does not exists or null
+                    break;
+                }
+                case 4:{
+                    System.out.println("type the entity id");
+                    String idStr=scan2.nextLine();
+                    //check if str can be Long
+                    Long id=Long.valueOf(idStr);
+                    //throw message if entity id does not exists or null
+                    System.out.println(controller.GetStudentByEntityId(id));
+                    break;
+                }
+                case 5:{
+                    System.out.println("type the entity id");
+                    String idStr=scan2.nextLine();
+                    //check if str can be long
+                    Long id=Long.valueOf(idStr);
+                    //throw message if entity id does not exists or null
+                    controller.deleteStudent(id);
+                    break;
+                }
+                case 6:{
+                    controller.saveRepository();
                     break;
                 }
                 case 0:return;

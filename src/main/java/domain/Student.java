@@ -1,18 +1,16 @@
 package domain;
 
-public class Student {
+public class Student extends BaseEntity<Long> {
     private String name;
-    private static int id=0;
-    private int studentId;
+    private String studentId;
 
-    public Student(String name){
+    public Student(String id,String name){
         this.name=name;
         studentId=id;
-        id++;
     }
     @Override
     public String toString(){
-        return this.name+" with id:"+Integer.toString(studentId);
+        return this.name+" with Student id:"+ studentId+" ";
     }
 
     public String getName() {
@@ -23,11 +21,12 @@ public class Student {
         this.name=new_name;
     }
 
-    public int getId(){
+    public String getStudentId(){
         return studentId;
     }
 
-    public void setId(int newId){
+    public void setStudentId(String newId){
         studentId=newId;
     }
+
 }
