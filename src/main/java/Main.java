@@ -14,7 +14,7 @@ public class Main {
     public static void main(String arg[])
     {
         Validator<Student> studentValidator = new StudentValidator();
-        Repository<Long, Student> studentRepository = new StudentFileRepository(studentValidator, "C:\\Users\\Bubu\\MPPLab\\src\\main\\java\\data\\students");
+        Repository<Long, Student> studentRepository = new StudentFileRepository(studentValidator, "C:\\Users\\crist\\MPPLab\\src\\main\\java\\data\\students");
         //Repository<Long, Student> studentRepository = new InMemoryRepository<>(studentValidator);
         Controller controller = new Controller(studentRepository);
         UI ui = new UI(controller);
