@@ -3,6 +3,7 @@ package userInterface;
 
 import Controller.Controller;
 import domain.Student;
+import domain.validators.ValidatorException;
 
 import java.util.Scanner;
 
@@ -43,6 +44,12 @@ public class UI {
                     }catch (NumberFormatException exc){
                         System.out.println("Id must be Long type");
                     }
+                    try {
+                        controller.addStudent(studentStr);
+                    }
+                    catch (ValidatorException exc){
+                        System.out.println(exc);
+                    }
                     //throw message if entity id already exists
                     break;
                 }
@@ -59,7 +66,13 @@ public class UI {
                     }catch (NumberFormatException exc){
                         System.out.println("Id must be Long type");
                     }
-                    controller.update(studentStr);
+                    try {
+                        controller.update(studentStr);
+                    }
+                    catch (ValidatorException exc){
+                        System.out.println(exc.getMessage());
+                        //System.out.println(exc.getMessage());
+                    }
                     //throw message if entity id does not exists or null
                     break;
                 }

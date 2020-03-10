@@ -1,6 +1,7 @@
 package Controller;
 
 import domain.Student;
+import domain.validators.StudentValidator;
 import domain.validators.ValidatorException;
 import repository.InMemoryRepository;
 import repository.Repository;
@@ -8,27 +9,38 @@ import repository.StudentFileRepository;
 
 public class Controller {
     private Repository<Long, Student> repository;
-
+    private StudentValidator studentValidator;
     public Controller(Repository<Long,Student> studentRepository){
         this.repository=studentRepository;
+        this.studentValidator=new StudentValidator();
     }
 
-    public void addStudent(String[] studentstr){
-        Student student= new Student(studentstr[1],studentstr[2]);
+    public void addStudent(String[] studentstr)throws ValidatorException{
+        Student student= new Student(studentstr[1],Long.valueOf(studentstr[2]));
         student.setId(Long.valueOf(studentstr[0]));
-        //exceptii bla bla
-        repository.add(student);
+        try{
+            repository.add(student);
+        }
+        catch (ValidatorException exc){
+            throw exc;
+        }
+
     }
     public String PrintStudents(){
         return repository.toString();
     }
 
-    public void update(String[] stringStr){
+    public void update(String[] studentStr) throws ValidatorException{
 
-        Student student= new Student(stringStr[1],stringStr[2]);
-        student.setId(Long.valueOf(stringStr[0]));
-        //exceptii bla bla
-        repository.update(student);
+        Student student= new Student(studentStr[1],Long.valueOf(studentStr[2]));
+        student.setId(Long.valueOf(studentStr[0]));
+        try{
+            repository.update(student);
+        }
+        catch (ValidatorException exc){
+            throw exc;
+        }
+
     }
 
     public String GetStudentByEntityId(Long id){

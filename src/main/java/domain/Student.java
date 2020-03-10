@@ -2,15 +2,22 @@ package domain;
 
 public class Student extends BaseEntity<Long> {
     private String name;
-    private String studentId;
 
-    public Student(String id,String name){
+
+    private Long group;
+
+    //STERGE studentid
+    //Group + Validare pe grupa
+
+
+
+    public Student(String name, Long group){
         this.name=name;
-        studentId=id;
+        this.group=group;
     }
     @Override
     public String toString(){
-        return this.name+" with Student id:"+ studentId+" ";
+        return this.name+" with Student group:"+ group.toString()+" ";
     }
 
     public String getName() {
@@ -21,13 +28,11 @@ public class Student extends BaseEntity<Long> {
         this.name=new_name;
     }
 
-    public String getStudentId(){
-        return studentId;
+    public Long getGroup() {
+        return group;
     }
 
-    public void setStudentId(String newId)
-    {
-        studentId=newId;
+    public void setGroup(Long group) {
+        this.group = group;
     }
-
 }

@@ -34,10 +34,10 @@ public class StudentFileRepository extends InMemoryRepository<Long, Student> {
                 List<String> items = Arrays.asList(line.split(","));
 
                 Long id = Long.valueOf(items.get(0));
-                String studentId = items.get(1);
-                String name = items.get((2));
+                Long group = Long.valueOf(items.get(2));
+                String name = items.get((1));
 
-                Student student = new Student(studentId,name);
+                Student student = new Student(name,group);
                 student.setId(id);
 
                 try {
@@ -59,7 +59,7 @@ public class StudentFileRepository extends InMemoryRepository<Long, Student> {
                     this.findAll().forEach(entity->
                     {
                         try {
-                            bufferedWriter.write(entity.getId() + "," + entity.getStudentId() + "," + entity.getName());
+                            bufferedWriter.write(entity.getId() + "," + entity.getName() + "," + entity.getGroup());
                             bufferedWriter.newLine();
                         } catch (IOException e) {
                             e.printStackTrace();
