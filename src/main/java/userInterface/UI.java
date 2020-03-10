@@ -37,8 +37,12 @@ public class UI {
                 case 1:{
                     System.out.println("type: Id,Student Id,name");
                     String[] studentStr=scan2.nextLine().split(",");
-                    //Checks If types are valid
-                    controller.addStudent(studentStr);
+                    try{
+                        Long id=Long.valueOf(studentStr[0]);
+                        controller.addStudent(studentStr);
+                    }catch (NumberFormatException exc){
+                        System.out.println("Id must be Long type");
+                    }
                     //throw message if entity id already exists
                     break;
                 }
@@ -49,7 +53,12 @@ public class UI {
                 case 3:{
                     System.out.println("{entity id,new Student Id,new Student Name}");
                     String[] studentStr=scan2.nextLine().split(",");
-                    //checks if types are valid
+                    try{
+                        Long id=Long.valueOf(studentStr[0]);
+                        controller.addStudent(studentStr);
+                    }catch (NumberFormatException exc){
+                        System.out.println("Id must be Long type");
+                    }
                     controller.update(studentStr);
                     //throw message if entity id does not exists or null
                     break;

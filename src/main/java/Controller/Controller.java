@@ -1,6 +1,7 @@
 package Controller;
 
 import domain.Student;
+import domain.validators.ValidatorException;
 import repository.InMemoryRepository;
 import repository.Repository;
 import repository.StudentFileRepository;
