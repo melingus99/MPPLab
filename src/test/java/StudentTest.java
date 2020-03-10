@@ -11,8 +11,8 @@ import static org.junit.Assert.fail;
 public class StudentTest {
     private static final Long ID = new Long(1);
     private static final Long NEW_ID = new Long(2);
-    private static final String SERIAL_NUMBER = "sn01";
-    private static final String NEW_SERIAL_NUMBER = "sn02";
+    private static final String STUDENT_ID = "sn01";
+    private static final String NEW_STUDENT_ID = "sn02";
     private static final String NAME = "studentName";
     private static final String NEW_NAME = "studentName2";
 
@@ -20,7 +20,7 @@ public class StudentTest {
 
     @Before
     public void setUp() throws Exception {
-        student = new Student(SERIAL_NUMBER, NAME);
+        student = new Student(STUDENT_ID, NAME);
         student.setId(ID);
     }
 
@@ -51,4 +51,14 @@ public class StudentTest {
         assertEquals(NEW_NAME,student.getName());
     }
 
+    @Test
+    public void testGetStudentId() throws Exception {
+        assertEquals("Serial numbers should be equal", STUDENT_ID, student.getStudentId());
+    }
+
+    @Test
+    public void testSetSerialNumber() throws Exception {
+        student.setStudentId(NEW_STUDENT_ID);
+        assertEquals("Serial numbers should be equal", NEW_STUDENT_ID, student.getStudentId());
+    }
 }
