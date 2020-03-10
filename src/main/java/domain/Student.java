@@ -25,7 +25,8 @@ public class Student extends BaseEntity<Long> {
         return studentId;
     }
 
-    public void setStudentId(String newId){
+    public void setStudentId(String newId)
+    {
         studentId=newId;
     }
 
