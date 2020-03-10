@@ -31,12 +31,7 @@ public class Controller {
 
         Student student= new Student(studentStr[1],Long.valueOf(studentStr[2]));
         student.setId(Long.valueOf(studentStr[0]));
-        try{
             repository.update(student);
-        }
-        catch (ValidatorException exc){
-            throw exc;
-        }
 
     }
 

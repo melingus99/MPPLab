@@ -36,13 +36,17 @@ public class UI {
             input= scan.nextInt();
             switch (input) {
                 case 1:{
-                    System.out.println("type: Id,Student Id,name");
+                    System.out.println("type: Id,name,group");
                     String[] studentStr=scan2.nextLine().split(",");
                     try{
                         Long id=Long.valueOf(studentStr[0]);
-                        controller.addStudent(studentStr);
+                        Long group=Long.valueOf(studentStr[2]);
+                        if(controller.GetStudentByEntityId(id).toString()!="Optional.empty")
+                            System.out.println("student with id:"+studentStr[0]+" already exists");
+
                     }catch (NumberFormatException exc){
                         System.out.println("Id must be Long type");
+                        continue;
                     }
                     try {
                         controller.addStudent(studentStr);
@@ -58,13 +62,17 @@ public class UI {
                     break;
                 }
                 case 3:{
-                    System.out.println("{entity id,new Student Id,new Student Name}");
+                    System.out.println("{entity id,new Student Name,new group}");
                     String[] studentStr=scan2.nextLine().split(",");
                     try{
                         Long id=Long.valueOf(studentStr[0]);
-                        controller.update(studentStr);
-                    }catch (ValidatorException exc){
+                        Long group=Long.valueOf(studentStr[2]);
+                        if(controller.GetStudentByEntityId(id).toString()=="Optional.empty")
+                            System.out.println("no student with id:"+studentStr[0]);
+
+                    }catch (NumberFormatException exc){
                         System.out.println("Id must be Long type");
+                        continue;
                     }
                     try {
                         controller.update(studentStr);
@@ -79,10 +87,10 @@ public class UI {
                     String idStr=scan2.nextLine();
                     try {
                         Long id=Long.valueOf(idStr);
-                        if(controller.GetStudentByEntityId(id).toString()!="Optional.empty")
-                            System.out.println(controller.GetStudentByEntityId(id));
-                        else
+                        if(controller.GetStudentByEntityId(id).toString()=="Optional.empty")
                             System.out.println("no student with id:"+idStr);
+                        else
+                            controller.deleteStudent(id);
                     }
                     catch (Exception exc){
                         System.out.println("Input must be a number");
