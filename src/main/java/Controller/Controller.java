@@ -18,12 +18,9 @@ public class Controller {
     public void addStudent(String[] studentstr)throws ValidatorException{
         Student student= new Student(studentstr[1],Long.valueOf(studentstr[2]));
         student.setId(Long.valueOf(studentstr[0]));
-        try{
+
             repository.add(student);
-        }
-        catch (ValidatorException exc){
-            throw exc;
-        }
+
 
     }
     public String PrintStudents(){

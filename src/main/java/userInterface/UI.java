@@ -62,8 +62,8 @@ public class UI {
                     String[] studentStr=scan2.nextLine().split(",");
                     try{
                         Long id=Long.valueOf(studentStr[0]);
-                        controller.addStudent(studentStr);
-                    }catch (NumberFormatException exc){
+                        controller.update(studentStr);
+                    }catch (ValidatorException exc){
                         System.out.println("Id must be Long type");
                     }
                     try {
