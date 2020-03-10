@@ -71,27 +71,37 @@ public class UI {
                     }
                     catch (ValidatorException exc){
                         System.out.println(exc.getMessage());
-                        //System.out.println(exc.getMessage());
                     }
-                    //throw message if entity id does not exists or null
                     break;
                 }
                 case 4:{
                     System.out.println("type the entity id");
                     String idStr=scan2.nextLine();
-                    //check if str can be Long
-                    Long id=Long.valueOf(idStr);
-                    //throw message if entity id does not exists or null
-                    System.out.println(controller.GetStudentByEntityId(id));
+                    try {
+                        Long id=Long.valueOf(idStr);
+                        if(controller.GetStudentByEntityId(id).toString()!="Optional.empty")
+                            System.out.println(controller.GetStudentByEntityId(id));
+                        else
+                            System.out.println("no student with id:"+idStr);
+                    }
+                    catch (Exception exc){
+                        System.out.println("Input must be a number");
+                    }
                     break;
                 }
                 case 5:{
                     System.out.println("type the entity id");
                     String idStr=scan2.nextLine();
-                    //check if str can be long
-                    Long id=Long.valueOf(idStr);
-                    //throw message if entity id does not exists or null
-                    controller.deleteStudent(id);
+                    try {
+                        Long id = Long.valueOf(idStr);
+                        if(controller.GetStudentByEntityId(id).toString()!="Optional.empty")
+                            controller.deleteStudent(id);
+                        else
+                            System.out.println("no student with id:"+idStr);
+                    }
+                    catch (Exception exe){
+                        System.out.println("Input must be a number");
+                    }
                     break;
                 }
                 case 6:{

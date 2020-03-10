@@ -15,18 +15,17 @@ import static org.junit.Assert.fail;
 
 public class InMemoryRepoTest {
 
-    private Student testStudent1 = new Student("1","Popescu");
+    private Student testStudent1 = new Student("Popescu",923);
     testStudent1.setId(1)
-    private Student testStudent2 = new Student("2","Ionescu");
+    private Student testStudent2 = new Student("Ionescu",111);
     testStudent2.setId(1);
     private Repository<Long, Student> testRepository = new InMemoryRepository<>(studentValidator);
-    private Set<> ;
 
 
     @Ignore
     @Test
     public void testFindOne() throws Exception {
-        fail("Not yet tested");
+        assertEqual(testRepository.findOne(1),"Optional.[1,Popescu,932]")
     }
 
     @Ignore
