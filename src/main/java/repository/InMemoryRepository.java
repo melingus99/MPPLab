@@ -64,7 +64,7 @@ public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Reposit
 
     @Override
     public String toString(){
-        String str=entities.entrySet().stream().map(student->student.toString()).reduce("",(s1,s2)->s1+="\n"+s2);
+        String str=entities.entrySet().stream().map(entity->entity.toString()).reduce("",(s1,s2)->s1+="\n"+s2);
         return str;
     }
 }

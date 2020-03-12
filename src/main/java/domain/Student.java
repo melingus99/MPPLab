@@ -2,12 +2,7 @@ package domain;
 
 public class Student extends BaseEntity<Long> {
     private String name;
-
-
     private Long group;
-
-    //STERGE studentid
-    //Group + Validare pe grupa
 
 
 

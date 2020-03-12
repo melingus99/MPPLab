@@ -7,10 +7,10 @@ import repository.InMemoryRepository;
 import repository.Repository;
 import repository.StudentFileRepository;
 
-public class Controller {
+public class StudentController {
     private Repository<Long, Student> repository;
     private StudentValidator studentValidator;
-    public Controller(Repository<Long,Student> studentRepository){
+    public StudentController(Repository<Long,Student> studentRepository){
         this.repository=studentRepository;
         this.studentValidator=new StudentValidator();
     }
@@ -36,12 +36,9 @@ public class Controller {
     }
 
     public String GetStudentByEntityId(Long id){
-        //exceptii bla bla
-        //To be changed a bit
         return repository.findOne(id).toString();
     }
     public void deleteStudent(Long id){
-        //exceptii bla bla
         repository.delete(id);
     }
 
