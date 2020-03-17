@@ -28,6 +28,7 @@ import domain.validators.Validator;
 
 public class StudentXmlRepository extends InMemoryRepository<Long, Student> {
     private String fileName;
+    private String saveFile;
 
     public StudentXmlRepository(Validator<Student> validator) throws IOException, SAXException, ParserConfigurationException {
         super(validator);
@@ -95,7 +96,7 @@ public class StudentXmlRepository extends InMemoryRepository<Long, Student> {
                 .newInstance()
                 .newTransformer();
         transformer.transform(new DOMSource(document),
-                new StreamResult(new File("./data/bookstore2.xml")));
+                new StreamResult(new File(saveFile)));
     }
 }
 
