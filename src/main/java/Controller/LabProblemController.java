@@ -13,6 +13,7 @@ import repository.StudentFileRepository;
 public class LabProblemController {
     private Repository<Long, LabProblem> repository;
     private LabProblemValidator labProblemValidator;
+
     public LabProblemController(Repository<Long, LabProblem> labProblemRepository){
         this.repository=labProblemRepository;
         this.labProblemValidator=new LabProblemValidator();

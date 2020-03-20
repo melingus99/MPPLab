@@ -1,8 +1,10 @@
 package userInterface;
 
 
+import Controller.AssignmentController;
 import Controller.LabProblemController;
 import Controller.StudentController;
+import domain.Assignment;
 import domain.LabProblem;
 import domain.validators.ValidatorException;
 
@@ -12,15 +14,17 @@ public class UI {
 
     private StudentController studentController;
     private LabProblemController labProblemController;
-    public UI(StudentController studentController, LabProblemController labProblemController){
+    private AssignmentController assignmentController;
+    public UI(StudentController studentController, LabProblemController labProblemController,AssignmentController assignmentController){
         this.studentController = studentController;
         this.labProblemController=labProblemController;
+        this.assignmentController=assignmentController;
     }
 
     private void add(){
         Scanner scan=new Scanner(System.in);
         Scanner scan2=new Scanner(System.in);
-        System.out.println("type: 1 to add a student \n 2 to add a lab problem");
+        System.out.println("type: 1 to add a student \n 2 to add a lab problem \n 3 to add an assignment");
         int input=scan.nextInt();
         switch (input){
             case 1:{
@@ -50,7 +54,7 @@ public class UI {
                 try{
                     Long id=Long.valueOf(labProblemStr[0]);
                     if(labProblemController.GetEntityById(id).toString()!="Optional.empty")
-                        System.out.println("student with id:"+labProblemStr+" already exists");
+                        System.out.println("lab problem with id:"+labProblemStr[0]+" already exists");
 
                 }catch (NumberFormatException exc){
                     System.out.println("Id must be Long type");
@@ -64,6 +68,35 @@ public class UI {
                 }
                 break;
             }
+            case 3: {
+                System.out.println("type: AssignmentId,StudentId,LabProblemId");
+                String[] assignmentStr = scan2.nextLine().split(",");
+                try {
+                    Long id = Long.valueOf(assignmentStr[0]);
+                    Long studentId = Long.valueOf(assignmentStr[1]);
+                    Long labProblemId = Long.valueOf(assignmentStr[2]);
+                    if (assignmentController.GetEntityById(id).toString() != "Optional.empty")
+                        System.out.println("Assignment with id:" + assignmentStr[0] + " already exists");
+
+                    if (studentController.GetStudentByEntityId(studentId).toString() == "Optional.empty")
+                        System.out.println("no student with id:" + assignmentStr[1]);
+
+                    if (labProblemController.GetEntityById(labProblemId).toString() == "Optional.empty")
+                        System.out.println("no lab problem with id:" + assignmentStr[2]);
+                    else{
+                        try {
+                            assignmentController.add(assignmentStr);
+                        } catch (ValidatorException exc) {
+                            System.out.println(exc);
+                        }
+                    }
+
+                } catch (NumberFormatException exc) {
+                    System.out.println("Id must be Long type");
+                    return;
+                }
+                break;
+            }
             default:{
                 System.out.println(" '"+input+"' "+"not a valid option");
                 break;
@@ -74,7 +107,7 @@ public class UI {
     private void update() {
         Scanner scan = new Scanner(System.in);
         Scanner scan2=new Scanner(System.in);
-        System.out.println("type: 1 to update a student \n 2 to update a lab problem");
+        System.out.println("type: 1 to update a student \n 2 to update a lab problem \n 3 to update an assignment");
         int input = scan.nextInt();
 
         switch (input) {
@@ -104,7 +137,7 @@ public class UI {
                 try {
                     Long id = Long.valueOf(labProblemStr[0]);
                     if (labProblemController.GetEntityById(id).toString() == "Optional.empty")
-                        System.out.println("no student with id:" + labProblemStr[0]);
+                        System.out.println("no lab problem with id:" + labProblemStr[0]);
 
                 } catch (NumberFormatException exc) {
                     System.out.println("Id must be Long type");
@@ -114,6 +147,36 @@ public class UI {
                     labProblemController.update(labProblemStr);
                 } catch (ValidatorException exc) {
                     System.out.println(exc.getMessage());
+                }
+                break;
+            }
+            case 3: {
+                System.out.println("type: AssignmentId,StudentId,LabProblemId,grade");
+                String[] assignmentStr = scan2.nextLine().split(",");
+                try {
+                    Long id = Long.valueOf(assignmentStr[0]);
+                    Long studentId = Long.valueOf(assignmentStr[1]);
+                    Long labProblemId = Long.valueOf(assignmentStr[2]);
+                    float grade=Float.valueOf(assignmentStr[3]);
+                    if (assignmentController.GetEntityById(id).toString() == "Optional.empty")
+                        System.out.println("no assignment with id: " + assignmentStr[0]);
+
+                    if (studentController.GetStudentByEntityId(studentId).toString() == "Optional.empty")
+                        System.out.println("no student with id:" + assignmentStr[1]);
+
+                    if (labProblemController.GetEntityById(labProblemId).toString() == "Optional.empty")
+                        System.out.println("no lab problem with id:" + assignmentStr[2]);
+
+                    else{
+                        try {
+                            assignmentController.update(assignmentStr);
+                        } catch (ValidatorException exc) {
+                            System.out.println(exc);
+                        }
+                    }
+                } catch (NumberFormatException exc) {
+                    System.out.println("Id must be Long type,grade must be float tyoe");
+                    return;
                 }
                 break;
             }
@@ -127,7 +190,7 @@ public class UI {
     private void getEntity(){
         Scanner scan=new Scanner(System.in);
         Scanner scan2=new Scanner(System.in);
-        System.out.println("type: 1 to get a student \n 2 to get a lab problem");
+        System.out.println("type: 1 to get a student \n 2 to get a lab problem \n 3 to get an assignment");
         int input=scan.nextInt();
         switch (input){
             case 1:{
@@ -162,6 +225,22 @@ public class UI {
                 }
                 break;
             }
+            case 3: {
+                System.out.println("type: AssignmentId");
+                String idStr = scan2.nextLine();
+                try {
+                    Long id = Long.valueOf(idStr);
+                    if (assignmentController.GetEntityById(id).toString() == "Optional.empty")
+                        System.out.println("no assignment with id:" + idStr);
+                    else
+                        System.out.println(assignmentController.GetEntityById(id).toString());
+
+                } catch (NumberFormatException exc) {
+                    System.out.println("Id must be Long type");
+                    return;
+                }
+                break;
+            }
             default:{
                 System.out.println(" '"+input+"' "+"not a valid option");
                 break;
@@ -172,7 +251,7 @@ public class UI {
     private void delete(){
         Scanner scan=new Scanner(System.in);
         Scanner scan2=new Scanner(System.in);
-        System.out.println("type: 1 to delete a student \n 2 to delete a lab problem");
+        System.out.println("type: 1 to delete a student \n 2 to delete a lab problem \n 3 to delete an assignment" );
         int input=scan.nextInt();
         switch (input){
             case 1:{
@@ -190,18 +269,32 @@ public class UI {
                 }
                 break;
             }
-            case 2:{
+            case 2: {
                 System.out.println("type the entity id");
-                String idStr=scan2.nextLine();
+                String idStr = scan2.nextLine();
                 try {
                     Long id = Long.valueOf(idStr);
-                    if(labProblemController.toString()=="Optional.empty")
-                        System.out.println("no student with id:"+idStr);
+                    if (labProblemController.toString() == "Optional.empty")
+                        System.out.println("no student with id:" + idStr);
                     else
                         labProblemController.delete(id);
-                }
-                catch (Exception exe){
+                } catch (Exception exe) {
                     System.out.println("Input must be a number");
+                }
+                break;
+            }
+            case 3:{
+                System.out.println("type: AssignmentId");
+                String idStr = scan2.nextLine();
+                try {
+                    Long id = Long.valueOf(idStr);
+                    if (assignmentController.GetEntityById(id).toString() == "Optional.empty")
+                        System.out.println("no assignment with id:" + idStr);
+                    else
+                        assignmentController.delete(id);
+                } catch (NumberFormatException exc) {
+                    System.out.println("Input must be a number");
+                    return;
                 }
                 break;
             }
@@ -234,7 +327,8 @@ public class UI {
                     break;
                 }
                 case 2:{
-                    System.out.println("Students:"+studentController.PrintStudents()+"\nLab Problems:"+labProblemController.PrintAll());
+                    System.out.println("Students:"+studentController.PrintStudents()+"\nLab Problems:"
+                                        +labProblemController.PrintAll()+"\nAssignments:"+assignmentController.PrintAll());
                     break;
                 }
                 case 3:{
