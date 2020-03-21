@@ -8,11 +8,10 @@ import domain.validators.AssignmentValidator;
 import domain.validators.LabProblemValidator;
 import domain.validators.StudentValidator;
 import domain.validators.Validator;
-import repository.AssignmentFileRepository;
-import repository.LabProblemFileRepository;
-import repository.Repository;
-import repository.StudentFileRepository;
+import repository.*;
+import repository.DbRepository.StudentDbRepository;
 import userInterface.UI;
+
 
 public class Main {
 
@@ -20,7 +19,7 @@ public class Main {
     {
 
         Validator<Student> studentValidator = new StudentValidator();
-        Repository<Long, Student> studentRepository = new StudentFileRepository(studentValidator, "data\\students.txt");
+        SortingRepository<Long, Student> studentRepository = new StudentDbRepository(studentValidator);
         StudentController studentController = new StudentController(studentRepository);
 
         Validator<LabProblem> labProblemValidator= new LabProblemValidator();

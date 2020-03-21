@@ -12,6 +12,10 @@ public class BaseEntity<ID> {
         this.id = id;
     }
 
+    public Comparable getVariable(String variable){
+        return (Comparable) id;
+    }
+
     @Override
     public String toString() {
         return "Entity with id: "+id;

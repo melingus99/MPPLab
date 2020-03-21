@@ -1,17 +1,18 @@
 package Controller;
 
+import com.sun.tools.javac.util.List;
 import domain.Student;
 import domain.validators.StudentValidator;
 import domain.validators.ValidatorException;
-import repository.InMemoryRepository;
-import repository.Repository;
-import repository.StudentFileRepository;
+import repository.*;
+
+import java.util.ArrayList;
 
 public class StudentController {
-    private Repository<Long, Student> repository;
+    private SortingRepository<Long, Student> repository;
     private StudentValidator studentValidator;
 
-    public StudentController(Repository<Long,Student> studentRepository){
+    public StudentController(SortingRepository<Long, Student> studentRepository){
         this.repository=studentRepository;
         this.studentValidator=new StudentValidator();
     }
@@ -25,7 +26,10 @@ public class StudentController {
 
     }
     public String PrintStudents(){
-        return repository.toString();
+        Sort<Student> sort=new Sort("asc","name","desc","group");
+
+        ArrayList<Student> students=(ArrayList<Student>)this.repository.findAll(sort);
+        return students.toString();
     }
 
     public void update(String[] studentStr) throws ValidatorException{

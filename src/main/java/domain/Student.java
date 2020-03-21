@@ -12,7 +12,7 @@ public class Student extends BaseEntity<Long> {
     }
     @Override
     public String toString(){
-        return this.name+" with Student group:"+ group.toString()+" ";
+        return "Id:"+this.getId()+", name: "+this.name+", group:"+ group.toString()+" ";
     }
 
     public String getName() {
@@ -29,5 +29,21 @@ public class Student extends BaseEntity<Long> {
 
     public void setGroup(Long group) {
         this.group = group;
+    }
+
+    @Override
+    public Comparable getVariable(String variable){
+        switch (variable){
+            case "group":{
+                return (Comparable)this.getGroup();
+            }
+            case "name":{
+                return (Comparable)this.getName();
+            }
+            case "id":{
+                return (Comparable)this.getId();
+            }
+        }
+        return null;
     }
 }
