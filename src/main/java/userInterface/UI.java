@@ -8,6 +8,7 @@ import domain.Assignment;
 import domain.LabProblem;
 import domain.validators.ValidatorException;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class UI {
@@ -262,6 +263,7 @@ public class UI {
                     if(studentController.GetStudentByEntityId(id).toString()=="Optional.empty")
                         System.out.println("no student with id:"+idStr);
                     else
+                        assignmentController.filterByStudentId(id).stream().forEach(assignmentId->assignmentController.delete(assignmentId));
                         studentController.deleteStudent(id);
                 }
                 catch (Exception exe){
@@ -275,8 +277,9 @@ public class UI {
                 try {
                     Long id = Long.valueOf(idStr);
                     if (labProblemController.toString() == "Optional.empty")
-                        System.out.println("no student with id:" + idStr);
+                        System.out.println("no lab problem with id:" + idStr);
                     else
+                        assignmentController.filterByLabProblemId(id).stream().forEach(assignmentId->assignmentController.delete(assignmentId));
                         labProblemController.delete(id);
                 } catch (Exception exe) {
                     System.out.println("Input must be a number");
@@ -344,8 +347,13 @@ public class UI {
                     break;
                 }
                 case 6:{
-                    studentController.saveRepository();
-                    labProblemController.saveRepository();
+                    try {
+                        studentController.saveRepository();
+                        labProblemController.saveRepository();
+                        assignmentController.saveRepository();
+                    }catch (Exception exc){
+                        System.out.println("repository auto-saves");
+                    }
                     break;
                 }
                 case 0:return;

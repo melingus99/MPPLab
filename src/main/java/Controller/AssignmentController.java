@@ -1,21 +1,25 @@
 package Controller;
 
+import com.sun.tools.javac.util.List;
 import domain.Assignment;
 import domain.Student;
 import domain.validators.AssignmentValidator;
-import domain.validators.StudentValidator;
 import domain.validators.ValidatorException;
-import repository.AssignmentFileRepository;
-import repository.InMemoryRepository;
+import repository.FileRepository.AssignmentFileRepository;
 import repository.Repository;
-import repository.StudentFileRepository;
+import repository.Sort;
+import repository.SortingRepository;
+
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class AssignmentController {
 
-    private Repository<Long, Assignment> repository;
+    private SortingRepository<Long, Assignment> repository;
     private AssignmentValidator assignmentValidator;
 
-    public AssignmentController(Repository<Long, Assignment> assignmentRepository){
+    public AssignmentController(SortingRepository<Long, Assignment> assignmentRepository){
         this.repository=assignmentRepository;
         this.assignmentValidator=new AssignmentValidator();
     }
@@ -30,7 +34,11 @@ public class AssignmentController {
 
     }
     public String PrintAll(){
-        return repository.toString();
+        Sort<Assignment> sort=new Sort("asc","grade","asc","sid");
+
+        ArrayList<Assignment> assignments=(ArrayList<Assignment>)this.repository.findAll(sort);
+        String str=assignments.stream().map(entity->entity.toString()).reduce("",(s1,s2)->s1+="\n"+s2);
+        return str;
     }
 
     public void update(String[] assignmentStr) throws ValidatorException{
@@ -46,12 +54,26 @@ public class AssignmentController {
         return repository.findOne(id).toString();
     }
 
+    public Set<Long> filterByStudentId(Long studentId){
+        ArrayList<Assignment> filteredEntities=(ArrayList<Assignment>) repository.findAll();
+        Set<Long>filteredEntitiesId=filteredEntities.stream().filter(assignment -> assignment.getStudentId()==studentId)
+                .map(assignment -> assignment.getId()).collect(Collectors.toSet());
+        return filteredEntitiesId;
+    }
+
+    public Set<Long> filterByLabProblemId(Long labProblemId){
+        ArrayList<Assignment> filteredEntities=(ArrayList<Assignment>)repository.findAll();
+        Set<Long>filteredEntitiesId=filteredEntities.stream().filter(assignment -> assignment.getLabProblemId()==labProblemId)
+                .map(assignment -> assignment.getId()).collect(Collectors.toSet());
+        return filteredEntitiesId;
+    }
+
+
     public void delete(Long id){
         repository.delete(id);
     }
 
     public void saveRepository(){
-        AssignmentFileRepository fileRepository=(AssignmentFileRepository) repository;
-        fileRepository.saveToFile();
+        ((AssignmentFileRepository) repository).saveToFile();
     }
 }

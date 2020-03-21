@@ -3,6 +3,7 @@ package repository;
 import domain.BaseEntity;
 import domain.validators.ValidatorException;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 /**

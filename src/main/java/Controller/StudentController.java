@@ -1,10 +1,10 @@
 package Controller;
 
-import com.sun.tools.javac.util.List;
 import domain.Student;
 import domain.validators.StudentValidator;
 import domain.validators.ValidatorException;
 import repository.*;
+import repository.FileRepository.StudentFileRepository;
 
 import java.util.ArrayList;
 
@@ -29,10 +29,11 @@ public class StudentController {
         Sort<Student> sort=new Sort("asc","name","desc","group");
 
         ArrayList<Student> students=(ArrayList<Student>)this.repository.findAll(sort);
-        return students.toString();
+        String str=students.stream().map(entity->entity.toString()).reduce("",(s1,s2)->s1+="\n"+s2);
+        return str;
     }
 
-    public void update(String[] studentStr) throws ValidatorException{
+    public void update(String[] studentStr) throws ValidatorException {
 
         Student student= new Student(studentStr[1],Long.valueOf(studentStr[2]));
         student.setId(Long.valueOf(studentStr[0]));
@@ -43,12 +44,13 @@ public class StudentController {
     public String GetStudentByEntityId(Long id){
         return repository.findOne(id).toString();
     }
+
     public void deleteStudent(Long id){
-        repository.delete(id);
+
+            repository.delete(id);
     }
 
     public void saveRepository(){
-        StudentFileRepository fileRepository=(StudentFileRepository) repository;
-        fileRepository.saveToFile();
+            ((StudentFileRepository) repository).saveToFile();
     }
 }

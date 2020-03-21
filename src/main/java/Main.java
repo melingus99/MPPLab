@@ -9,7 +9,11 @@ import domain.validators.LabProblemValidator;
 import domain.validators.StudentValidator;
 import domain.validators.Validator;
 import repository.*;
+import repository.DbRepository.AssignmentDbRepository;
+import repository.DbRepository.LabProblemsDbRepository;
 import repository.DbRepository.StudentDbRepository;
+import repository.FileRepository.AssignmentFileRepository;
+import repository.FileRepository.LabProblemFileRepository;
 import userInterface.UI;
 
 
@@ -23,11 +27,11 @@ public class Main {
         StudentController studentController = new StudentController(studentRepository);
 
         Validator<LabProblem> labProblemValidator= new LabProblemValidator();
-        Repository<Long,LabProblem> labProblemRepository=new LabProblemFileRepository(labProblemValidator,"data\\Lab Problems.txt");
+        SortingRepository<Long,LabProblem> labProblemRepository=new LabProblemsDbRepository(labProblemValidator);
         LabProblemController labProblemController=new LabProblemController(labProblemRepository);
 
         Validator<Assignment> assignmentValidator=new AssignmentValidator();
-        Repository<Long,Assignment> assignmentRepository=new AssignmentFileRepository(assignmentValidator,"data\\Assignments.txt");
+        SortingRepository<Long,Assignment> assignmentRepository=new AssignmentDbRepository(assignmentValidator);
         AssignmentController assignmentController =new AssignmentController(assignmentRepository);
         UI ui = new UI(studentController,labProblemController,assignmentController);
         ui.run();

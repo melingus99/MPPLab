@@ -42,6 +42,25 @@ public class Assignment extends BaseEntity<Long> {
     }
 
     @Override
+    public Comparable getVariable(String variable){
+        switch (variable){
+            case "student id":{
+                return (Comparable)this.getStudentId();
+            }
+            case "lab problem id":{
+                return (Comparable)this.getLabProblemId();
+            }
+            case "id":{
+                return (Comparable)this.getId();
+            }
+            case "grade":{
+                return (Comparable)this.getGrade();
+            }
+        }
+        return null;
+    }
+
+    @Override
     public String toString(){
         return "Assignment for student:"+this.getStudentId()+" with lab problem: "+this.getLabProblemId()+" has grade: "+this.getGrade();
     }

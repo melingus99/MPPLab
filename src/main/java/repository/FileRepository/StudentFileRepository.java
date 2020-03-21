@@ -1,9 +1,9 @@
-package repository;
+package repository.FileRepository;
 
-import domain.LabProblem;
 import domain.Student;
 import domain.validators.Validator;
 import domain.validators.ValidatorException;
+import repository.InMemoryRepository;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -17,10 +17,10 @@ import java.util.Optional;
 
 
 
-public class LabProblemFileRepository extends InMemoryRepository<Long, LabProblem> {
+public class StudentFileRepository extends InMemoryRepository<Long, Student> {
     private String fileName;
 
-    public LabProblemFileRepository(Validator<LabProblem> validator, String fileName) {
+    public StudentFileRepository(Validator<Student> validator, String fileName) {
         super(validator);
         this.fileName = fileName;
 
@@ -34,15 +34,15 @@ public class LabProblemFileRepository extends InMemoryRepository<Long, LabProble
             Files.lines(path).forEach(line -> {
                 List<String> items = Arrays.asList(line.split(","));
 
-                Long id=Long.valueOf(items.get(0));
-                String name = items.get(1);
-                String dueTime = items.get(2);
+                Long id = Long.valueOf(items.get(0));
+                Long group = Long.valueOf(items.get(2));
+                String name = items.get((1));
 
-                LabProblem labProblem= new LabProblem(name,dueTime);
-                labProblem.setId(id);
+                Student student = new Student(name,group);
+                student.setId(id);
 
                 try {
-                    super.add(labProblem);
+                    super.add(student);
                 } catch (ValidatorException e) {
                     e.printStackTrace();
                 }
@@ -57,15 +57,15 @@ public class LabProblemFileRepository extends InMemoryRepository<Long, LabProble
         Path path = Paths.get(fileName);
 
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(path)) {
-            this.findAll().forEach(entity->
-            {
-                try {
-                    bufferedWriter.write(entity.getId() + "," + entity.getName() + "," + entity.getDueTime());
-                    bufferedWriter.newLine();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+                    this.findAll().forEach(entity->
+                    {
+                        try {
+                            bufferedWriter.write(entity.getId() + "," + entity.getName() + "," + entity.getGroup());
+                            bufferedWriter.newLine();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
 
         } catch (IOException e) {
             e.printStackTrace();

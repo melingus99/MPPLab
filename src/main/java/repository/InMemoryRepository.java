@@ -20,6 +20,7 @@ public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Reposit
     public InMemoryRepository(Validator<T> validator) {
         this.validator = validator;
         entities = new HashMap<>();
+
     }
 
     @Override

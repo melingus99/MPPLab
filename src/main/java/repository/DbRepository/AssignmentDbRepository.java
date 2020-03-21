@@ -1,7 +1,7 @@
 package repository.DbRepository;
 
 
-import domain.Student;
+import domain.Assignment;
 import domain.validators.StudentValidator;
 import domain.validators.Validator;
 import domain.validators.ValidatorException;
@@ -12,31 +12,31 @@ import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class StudentDbRepository implements SortingRepository<Long, Student> {
+public class AssignmentDbRepository implements SortingRepository<Long, Assignment> {
 
-    private Map<Long, Student> entities;
-    private Validator<Student> validator;
+    private Map<Long, Assignment> entities;
+    private Validator<Assignment> validator;
 
     private final String URL = "jdbc:postgresql://localhost:5432/MPPLab5";
 
-    public StudentDbRepository(Validator<Student> validator) {
+    public AssignmentDbRepository(Validator<Assignment> validator) {
         this.validator = validator;
         entities = new HashMap<>();
-        List<Student > students=(List<Student>) findAll();
+        List<Assignment> students=(List<Assignment>) findAll();
         students.stream().forEach(student -> entities.put(student.getId(),student));
     }
 
     @Override
-    public Iterable<Student> findAll(Sort sort) {
-        List<Student> allEntities = (List<Student>) this.findAll();
+    public Iterable<Assignment> findAll(Sort sort) {
+        List<Assignment> allEntities = (List<Assignment>) this.findAll();
         Collections.sort(allEntities, sort);
         return allEntities;
 
     }
 
     @Override
-    public Optional<Student> findOne(Long id) {
-        String sql = "select * from student where id=?";
+    public Optional<Assignment> findOne(Long id) {
+        String sql = "select * from assignment where id=?";
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
         }
@@ -47,11 +47,13 @@ public class StudentDbRepository implements SortingRepository<Long, Student> {
             preparedStatement.setInt(1, id.intValue());
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Long studentId = (long) resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                Long groupNumber = (long) resultSet.getInt("groupnr");
-                Student student = new Student(name, groupNumber);
-                student.setId(id);
+                Long assignmentId = (long) resultSet.getInt("id");
+                Long studentId = (long) resultSet.getInt("sid");
+                Long labPoblemId = (long) resultSet.getInt("lid");
+                Float grade = resultSet.getFloat("grade");
+                Assignment assignment=new Assignment(studentId,labPoblemId);
+                assignment.setId(assignmentId);
+                assignment.setGrade(grade);
             }
         } finally {
             return Optional.ofNullable(entities.get(id));
@@ -59,9 +61,9 @@ public class StudentDbRepository implements SortingRepository<Long, Student> {
     }
 
     @Override
-    public Iterable<Student> findAll() {
-        List<Student> result = new ArrayList<>();
-        String sql = "select * from student";
+    public Iterable<Assignment> findAll() {
+        List<Assignment> result = new ArrayList<>();
+        String sql = "select * from assignment";
         try {
             Connection connection = DriverManager.getConnection(URL, "postgres", "mpplab2020");
             PreparedStatement preparedStatement =
@@ -69,11 +71,13 @@ public class StudentDbRepository implements SortingRepository<Long, Student> {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Long id = (long)resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                Long groupNumber = (long) resultSet.getInt("groupnr");
-                Student student = new Student(name, groupNumber);
-                student.setId(id);
-                result.add(student);
+                Long studentId = (long)resultSet.getInt("sid");
+                Long labProblemId = (long)resultSet.getInt("lid");
+                float grade = resultSet.getFloat("grade");
+                Assignment assignment=new Assignment(studentId,labProblemId);
+                assignment.setId(id);
+                assignment.setGrade(grade);
+                result.add(assignment);
             }
         } finally {
             return result;
@@ -82,8 +86,8 @@ public class StudentDbRepository implements SortingRepository<Long, Student> {
     }
 
     @Override
-    public Optional<Student> add(Student entity) throws ValidatorException {
-        String sql = "insert into student (id,name, groupnr) values(?,?,?)";
+    public Optional<Assignment> add(Assignment entity) throws ValidatorException {
+        String sql = "insert into assignment (id,sid,lid,grade) values(?,?,?,?)";
         if (entity == null) {
             throw new IllegalArgumentException("entity must not be null");
         }
@@ -93,8 +97,10 @@ public class StudentDbRepository implements SortingRepository<Long, Student> {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(sql);
             preparedStatement.setInt(1, entity.getId().intValue());
-            preparedStatement.setString(2, entity.getName());
-            preparedStatement.setInt(3, entity.getGroup().intValue());
+            preparedStatement.setInt(2, entity.getStudentId().intValue());
+            preparedStatement.setInt(3, entity.getLabProblemId().intValue());
+            preparedStatement.setFloat(4, entity.getGrade());
+
             preparedStatement.executeUpdate();
         } finally {
             return Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity));
@@ -103,8 +109,8 @@ public class StudentDbRepository implements SortingRepository<Long, Student> {
     }
 
     @Override
-    public Optional<Student> delete(Long id) {
-        String sql = "delete from student where id=?";
+    public Optional<Assignment> delete(Long id) {
+        String sql = "delete from assignment where id=?";
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
         }
@@ -121,8 +127,8 @@ public class StudentDbRepository implements SortingRepository<Long, Student> {
     }
 
     @Override
-    public Optional<Student> update(Student entity) throws ValidatorException {
-        String sql = "update student set name=?, groupnr=? where id=?";
+    public Optional<Assignment> update(Assignment entity) throws ValidatorException {
+        String sql = "update assignment set sid=?, lid=?,grade=? where id=?";
         if (entity == null) {
             throw new IllegalArgumentException("entity must not be null");
         }
@@ -131,9 +137,10 @@ public class StudentDbRepository implements SortingRepository<Long, Student> {
             Connection connection = DriverManager.getConnection(URL, "postgres", "mpplab2020");
             PreparedStatement preparedStatement =
                     connection.prepareStatement(sql);
-            preparedStatement.setInt(3, entity.getId().intValue());
-            preparedStatement.setString(1, entity.getName());
-            preparedStatement.setInt(2, entity.getGroup().intValue());
+            preparedStatement.setInt(4, entity.getId().intValue());
+            preparedStatement.setInt(1, entity.getStudentId().intValue());
+            preparedStatement.setInt(2, entity.getLabProblemId().intValue());
+            preparedStatement.setFloat(3, entity.getGrade());
 
             preparedStatement.executeUpdate();
         }
@@ -147,7 +154,7 @@ public class StudentDbRepository implements SortingRepository<Long, Student> {
     @Override
     public String toString() {
 
-        List<Student> entities = (List<Student>) this.findAll();
+        List<Assignment> entities = (List<Assignment>) this.findAll();
         String str = entities.stream().map(entity -> entity.toString()).reduce("", (s1, s2) -> s1 += "\n" + s2);
         return str;
     }

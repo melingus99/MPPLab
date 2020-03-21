@@ -28,8 +28,24 @@ public class LabProblem extends BaseEntity<Long> {
         this.name = name;
     }
 
+
+    @Override
+    public Comparable getVariable(String variable){
+        switch (variable){
+            case "dueTime":{
+                return (Comparable)this.getDueTime();
+            }
+            case "name":{
+                return (Comparable)this.getName();
+            }
+            case "id":{
+                return (Comparable)this.getId();
+            }
+        }
+        return null;
+    }
     @Override
     public String toString(){
-        return "Lab Problem:"+name+" With due time: "+dueTime;
+        return "Id:"+this.getId()+", Name: "+name+", due time: "+dueTime;
     }
 }

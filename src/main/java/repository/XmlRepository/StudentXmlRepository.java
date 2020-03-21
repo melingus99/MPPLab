@@ -1,4 +1,4 @@
-package repository;
+package repository.XmlRepository;
 
 import domain.validators.ValidatorException;
 import org.w3c.dom.*;
@@ -25,6 +25,7 @@ import java.util.stream.IntStream;
 
 import domain.Student;
 import domain.validators.Validator;
+import repository.InMemoryRepository;
 
 public class StudentXmlRepository extends InMemoryRepository<Long, Student> {
     private String fileName;
