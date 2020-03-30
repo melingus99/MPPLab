@@ -1,17 +1,19 @@
-plugins {
-    id 'java'
-}
+allprojects {
+//plugins {
+//    id 'java'
+//}
+    apply plugin: 'java'
+    group 'org.example'
+    version '1.0-SNAPSHOT'
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+    sourceCompatibility = JavaVersion.VERSION_11
 
-sourceCompatibility = 1.8
+    repositories {
+        mavenCentral()
+    }
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+        compile group: 'org.postgresql', name: 'postgresql', version: '42.2.11'
+    }
 }

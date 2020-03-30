@@ -1,2 +1,5 @@
 rootProject.name = 'MPPLab'
+include 'serverSocket'
+include 'commonSocket'
+include 'clientSocket'
 

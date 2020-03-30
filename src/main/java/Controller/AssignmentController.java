@@ -1,6 +1,6 @@
 package Controller;
 
-import com.sun.tools.javac.util.List;
+
 import domain.Assignment;
 import domain.Student;
 import domain.validators.AssignmentValidator;
