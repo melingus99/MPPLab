@@ -1,14 +1,14 @@
 package repository;
 
-
+/*
 import domain.BaseEntity;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Sort<T extends BaseEntity> implements Comparator<T> {
-    private List<Order> fields;
-    private List<String> args;
+public class Sort<T extends BaseEntity> implements Comparator<T> {}
+    //private List<Order> fields;
+    //private List<String> args;
 
     public Sort(String...args){
         AtomicInteger asc= new AtomicInteger(1);
@@ -58,3 +58,6 @@ class Order{
         this.name=name;
     }
 }
+
+ */
+

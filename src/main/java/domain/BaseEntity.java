@@ -1,7 +1,15 @@
 package domain;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import java.io.Serializable;
 
-public class BaseEntity<ID> {
+@MappedSuperclass
+public class BaseEntity<ID extends Serializable> implements Serializable {
+
+    @Id
+    @GeneratedValue
     private ID id;
 
     public ID getId() {
@@ -12,9 +20,11 @@ public class BaseEntity<ID> {
         this.id = id;
     }
 
-    public Comparable getVariable(String variable){
+    /*public Comparable getVariable(String variable){
         return (Comparable) id;
     }
+
+     */
 
     @Override
     public String toString() {

@@ -1,26 +1,31 @@
 package userInterface;
 
 
-import Controller.AssignmentController;
-import Controller.LabProblemController;
-import Controller.StudentController;
+import Controller.*;
 import domain.Assignment;
 import domain.LabProblem;
 import domain.validators.ValidatorException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
 import java.util.Scanner;
-
+@Component
 public class UI {
-
-    private StudentController studentController;
-    private LabProblemController labProblemController;
-    private AssignmentController assignmentController;
+    @Autowired
+    private StudentControllerInterface studentController;
+    @Autowired
+    private LabProblemControllerInterface labProblemController;
+    @Autowired
+    private AssignmentControllerInterface assignmentController;
+/*
     public UI(StudentController studentController, LabProblemController labProblemController,AssignmentController assignmentController){
         this.studentController = studentController;
         this.labProblemController=labProblemController;
         this.assignmentController=assignmentController;
-    }
+    }*/
+
+
 
     private void add(){
         Scanner scan=new Scanner(System.in);
@@ -34,7 +39,7 @@ public class UI {
                 try{
                     Long id=Long.valueOf(studentStr[0]);
                     Long group=Long.valueOf(studentStr[2]);
-                    if(studentController.GetStudentByEntityId(id).toString()!="Optional.empty")
+                    if(studentController.GetByEntityId(id).toString()!="Optional.empty")
                         System.out.println("student with id:"+studentStr[0]+" already exists");
 
                 }catch (NumberFormatException exc){
@@ -42,7 +47,7 @@ public class UI {
                     return;
                 }
                 try {
-                    studentController.addStudent(studentStr);
+                    studentController.add(studentStr);
                 }
                 catch (ValidatorException exc){
                     System.out.println(exc);
@@ -54,7 +59,7 @@ public class UI {
                 String[] labProblemStr=scan2.nextLine().split(",");
                 try{
                     Long id=Long.valueOf(labProblemStr[0]);
-                    if(labProblemController.GetEntityById(id).toString()!="Optional.empty")
+                    if(labProblemController.GetByEntityId(id).toString()!="Optional.empty")
                         System.out.println("lab problem with id:"+labProblemStr[0]+" already exists");
 
                 }catch (NumberFormatException exc){
@@ -76,13 +81,13 @@ public class UI {
                     Long id = Long.valueOf(assignmentStr[0]);
                     Long studentId = Long.valueOf(assignmentStr[1]);
                     Long labProblemId = Long.valueOf(assignmentStr[2]);
-                    if (assignmentController.GetEntityById(id).toString() != "Optional.empty")
+                    if (assignmentController.GetByEntityId(id).toString() != "Optional.empty")
                         System.out.println("Assignment with id:" + assignmentStr[0] + " already exists");
 
-                    if (studentController.GetStudentByEntityId(studentId).toString() == "Optional.empty")
+                    if (studentController.GetByEntityId(studentId).toString() == "Optional.empty")
                         System.out.println("no student with id:" + assignmentStr[1]);
 
-                    if (labProblemController.GetEntityById(labProblemId).toString() == "Optional.empty")
+                    if (labProblemController.GetByEntityId(labProblemId).toString() == "Optional.empty")
                         System.out.println("no lab problem with id:" + assignmentStr[2]);
                     else{
                         try {
@@ -118,7 +123,7 @@ public class UI {
                 try {
                     Long id = Long.valueOf(studentStr[0]);
                     Long group = Long.valueOf(studentStr[2]);
-                    if (studentController.GetStudentByEntityId(id).toString() == "Optional.empty")
+                    if (studentController.GetByEntityId(id).toString() == "Optional.empty")
                         System.out.println("no student with id:" + studentStr[0]);
 
                 } catch (NumberFormatException exc) {
@@ -137,7 +142,7 @@ public class UI {
                 String[] labProblemStr = scan2.nextLine().split(",");
                 try {
                     Long id = Long.valueOf(labProblemStr[0]);
-                    if (labProblemController.GetEntityById(id).toString() == "Optional.empty")
+                    if (labProblemController.GetByEntityId(id).toString() == "Optional.empty")
                         System.out.println("no lab problem with id:" + labProblemStr[0]);
 
                 } catch (NumberFormatException exc) {
@@ -159,13 +164,13 @@ public class UI {
                     Long studentId = Long.valueOf(assignmentStr[1]);
                     Long labProblemId = Long.valueOf(assignmentStr[2]);
                     float grade=Float.valueOf(assignmentStr[3]);
-                    if (assignmentController.GetEntityById(id).toString() == "Optional.empty")
+                    if (assignmentController.GetByEntityId(id).toString() == "Optional.empty")
                         System.out.println("no assignment with id: " + assignmentStr[0]);
 
-                    if (studentController.GetStudentByEntityId(studentId).toString() == "Optional.empty")
+                    if (studentController.GetByEntityId(studentId).toString() == "Optional.empty")
                         System.out.println("no student with id:" + assignmentStr[1]);
 
-                    if (labProblemController.GetEntityById(labProblemId).toString() == "Optional.empty")
+                    if (labProblemController.GetByEntityId(labProblemId).toString() == "Optional.empty")
                         System.out.println("no lab problem with id:" + assignmentStr[2]);
 
                     else{
@@ -200,10 +205,10 @@ public class UI {
                 String idStr=scan2.nextLine();
                 try {
                     Long id=Long.valueOf(idStr);
-                    if(studentController.GetStudentByEntityId(id).toString()=="Optional.empty")
+                    if(studentController.GetByEntityId(id).toString()=="Optional.empty")
                         System.out.println("no student with id:"+idStr);
                     else
-                        System.out.println(studentController.GetStudentByEntityId(id));
+                        System.out.println(studentController.GetByEntityId(id));
                 }
                 catch (ValidatorException exc){
                     System.out.println("Input must be a number");
@@ -216,10 +221,10 @@ public class UI {
                 String idStr=scan2.nextLine();
                 try {
                     Long id=Long.valueOf(idStr);
-                    if(labProblemController.GetEntityById(id).toString()=="Optional.empty")
+                    if(labProblemController.GetByEntityId(id).toString()=="Optional.empty")
                         System.out.println("no Lab Problem with id:"+idStr);
                     else
-                        System.out.println(labProblemController.GetEntityById(id));
+                        System.out.println(labProblemController.GetByEntityId(id));
                 }
                 catch (ValidatorException exc){
                     System.out.println("Input must be a number");
@@ -231,10 +236,10 @@ public class UI {
                 String idStr = scan2.nextLine();
                 try {
                     Long id = Long.valueOf(idStr);
-                    if (assignmentController.GetEntityById(id).toString() == "Optional.empty")
+                    if (assignmentController.GetByEntityId(id).toString() == "Optional.empty")
                         System.out.println("no assignment with id:" + idStr);
                     else
-                        System.out.println(assignmentController.GetEntityById(id).toString());
+                        System.out.println(assignmentController.GetByEntityId(id).toString());
 
                 } catch (NumberFormatException exc) {
                     System.out.println("Id must be Long type");
@@ -260,13 +265,13 @@ public class UI {
                 String idStr=scan2.nextLine();
                 try {
                     Long id = Long.valueOf(idStr);
-                    if(studentController.GetStudentByEntityId(id).toString()=="Optional.empty")
+                    if(studentController.GetByEntityId(id).toString()=="Optional.empty")
                         System.out.println("no student with id:"+idStr);
                     else
-                        assignmentController.filterByStudentId(id).stream().forEach(assignmentId->assignmentController.delete(assignmentId));
-                        studentController.deleteStudent(id);
+                       //assignmentController.filterByStudentId(id).stream().forEach(assignmentId->assignmentController.delete(assignmentId));
+                        studentController.delete(id);
                 }
-                catch (Exception exe){
+                catch (NumberFormatException exe){
                     System.out.println("Input must be a number");
                 }
                 break;
@@ -279,7 +284,7 @@ public class UI {
                     if (labProblemController.toString() == "Optional.empty")
                         System.out.println("no lab problem with id:" + idStr);
                     else
-                        assignmentController.filterByLabProblemId(id).stream().forEach(assignmentId->assignmentController.delete(assignmentId));
+                       //assignmentController.filterByLabProblemId(id).stream().forEach(assignmentId->assignmentController.delete(assignmentId));
                         labProblemController.delete(id);
                 } catch (Exception exe) {
                     System.out.println("Input must be a number");
@@ -291,7 +296,7 @@ public class UI {
                 String idStr = scan2.nextLine();
                 try {
                     Long id = Long.valueOf(idStr);
-                    if (assignmentController.GetEntityById(id).toString() == "Optional.empty")
+                    if (assignmentController.GetByEntityId(id).toString() == "Optional.empty")
                         System.out.println("no assignment with id:" + idStr);
                     else
                         assignmentController.delete(id);
@@ -311,7 +316,6 @@ public class UI {
         System.out.println("press 3 to update an entity");
         System.out.println("press 4 to get an entity");
         System.out.println("press 5 to delete an entity");
-        System.out.println("press 6 to save");
         System.out.println("press 0 to exit");
     }
 
@@ -330,8 +334,8 @@ public class UI {
                     break;
                 }
                 case 2:{
-                    System.out.println("Students:"+studentController.PrintStudents()+"\nLab Problems:"
-                                        +labProblemController.PrintAll()+"\nAssignments:"+assignmentController.PrintAll());
+                    System.out.println("Students:"+studentController.getAll().toString()+"\nLab Problems:"
+                                        +labProblemController.getAll().toString()+"\nAssignments:"+assignmentController.getAll().toString());
                     break;
                 }
                 case 3:{
@@ -344,16 +348,6 @@ public class UI {
                 }
                 case 5:{
                     this.delete();
-                    break;
-                }
-                case 6:{
-                    try {
-                        studentController.saveRepository();
-                        labProblemController.saveRepository();
-                        assignmentController.saveRepository();
-                    }catch (Exception exc){
-                        System.out.println("repository auto-saves");
-                    }
                     break;
                 }
                 case 0:return;

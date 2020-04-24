@@ -2,13 +2,18 @@ package domain;
 
 
 
+import javax.persistence.Entity;
 
+@Entity
 public class Assignment extends BaseEntity<Long> {
 
     private Long studentId;
     private Long labProblemId;
     private float grade;
 
+    public Assignment(){
+
+    }
 
     public Assignment(Long studentId,Long labProblemId){
         this.studentId=studentId;
@@ -41,7 +46,7 @@ public class Assignment extends BaseEntity<Long> {
         this.labProblemId = labProblemId;
     }
 
-    @Override
+    /*@Override
     public Comparable getVariable(String variable){
         switch (variable){
             case "student id":{
@@ -60,8 +65,10 @@ public class Assignment extends BaseEntity<Long> {
         return null;
     }
 
+     */
+
     @Override
     public String toString(){
-        return "Assignment for student:"+this.getStudentId()+" with lab problem: "+this.getLabProblemId()+" has grade: "+this.getGrade();
+        return "Assignment with id: "+getId()+" for student:"+this.getStudentId()+" with lab problem: "+this.getLabProblemId()+" has grade: "+this.getGrade();
     }
 }

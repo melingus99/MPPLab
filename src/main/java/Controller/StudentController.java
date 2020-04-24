@@ -3,54 +3,66 @@ package Controller;
 import domain.Student;
 import domain.validators.StudentValidator;
 import domain.validators.ValidatorException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import repository.*;
 import repository.FileRepository.StudentFileRepository;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-public class StudentController {
-    private SortingRepository<Long, Student> repository;
-    private StudentValidator studentValidator;
+@Service
+public class StudentController implements StudentControllerInterface {
 
-    public StudentController(SortingRepository<Long, Student> studentRepository){
-        this.repository=studentRepository;
-        this.studentValidator=new StudentValidator();
-    }
 
-    public void addStudent(String[] studentstr)throws ValidatorException{
+    public static final Logger log = LoggerFactory.getLogger(StudentController.class);
+    @Autowired
+    private StudentRepositoryInterface repository;
+
+
+    @Override
+    public void add(String[] studentstr)throws ValidatorException{
         Student student= new Student(studentstr[1],Long.valueOf(studentstr[2]));
         student.setId(Long.valueOf(studentstr[0]));
+            if(GetByEntityId(student.getId()).isEmpty())
+                repository.save(student);
 
-            repository.add(student);
-
-
-    }
-    public String PrintStudents(){
-        Sort<Student> sort=new Sort("asc","name","desc","group");
-
-        ArrayList<Student> students=(ArrayList<Student>)this.repository.findAll(sort);
-        String str=students.stream().map(entity->entity.toString()).reduce("",(s1,s2)->s1+="\n"+s2);
-        return str;
-    }
-
-    public void update(String[] studentStr) throws ValidatorException {
-
-        Student student= new Student(studentStr[1],Long.valueOf(studentStr[2]));
-        student.setId(Long.valueOf(studentStr[0]));
-            repository.update(student);
 
     }
 
-    public String GetStudentByEntityId(Long id){
-        return repository.findOne(id).toString();
+    @Override
+    @Transactional
+    public void update(String[] studentstr) {
+        Student student= new Student(studentstr[1],Long.valueOf(studentstr[2]));
+        student.setId(Long.valueOf(studentstr[0]));
+        log.trace("updateStudent - method entered: student={}", student);
+        repository.findById(student.getId())
+                .ifPresent(s -> {
+                    s.setName(student.getName());
+                    s.setGroup(student.getGroup());
+                    log.debug("updateStudent - updated: s={}", s);
+                });
+        log.trace("updateStudent - method finished");
     }
 
-    public void deleteStudent(Long id){
-
-            repository.delete(id);
+    @Override
+    public Optional<Student> GetByEntityId(Long id){
+        return repository.findById(id);
     }
 
-    public void saveRepository(){
-            ((StudentFileRepository) repository).saveToFile();
+    @Override
+    public void delete(Long id){
+
+            repository.deleteById(id);
+    }
+
+
+    @Override
+    public List<Student> getAll() {
+        return repository.findAll();
     }
 }

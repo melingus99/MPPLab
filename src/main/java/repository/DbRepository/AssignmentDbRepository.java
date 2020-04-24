@@ -5,7 +5,7 @@ import domain.Assignment;
 import domain.validators.StudentValidator;
 import domain.validators.Validator;
 import domain.validators.ValidatorException;
-import repository.Sort;
+//import repository.Sort;
 import repository.SortingRepository;
 
 import java.sql.*;
@@ -26,6 +26,7 @@ public class AssignmentDbRepository implements SortingRepository<Long, Assignmen
         students.stream().forEach(student -> entities.put(student.getId(),student));
     }
 
+    /*
     @Override
     public Iterable<Assignment> findAll(Sort sort) {
         List<Assignment> allEntities = (List<Assignment>) this.findAll();
@@ -33,7 +34,7 @@ public class AssignmentDbRepository implements SortingRepository<Long, Assignmen
         return allEntities;
 
     }
-
+*/
     @Override
     public Optional<Assignment> findOne(Long id) {
         String sql = "select * from assignment where id=?";

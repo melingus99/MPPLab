@@ -8,6 +8,7 @@ import domain.validators.AssignmentValidator;
 import domain.validators.LabProblemValidator;
 import domain.validators.StudentValidator;
 import domain.validators.Validator;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import repository.*;
 import repository.DbRepository.AssignmentDbRepository;
 import repository.DbRepository.LabProblemsDbRepository;
@@ -21,7 +22,20 @@ public class Main {
 
     public static void main(String arg[])
     {
+        System.out.println("hello");
 
+        AnnotationConfigApplicationContext context =
+                new AnnotationConfigApplicationContext(
+                        "Config"
+                );
+
+        context.getBean(UI.class).run();
+
+        System.out.println("bye");
+
+
+
+        /*
         Validator<Student> studentValidator = new StudentValidator();
         SortingRepository<Long, Student> studentRepository = new StudentDbRepository(studentValidator);
         StudentController studentController = new StudentController(studentRepository);
@@ -35,5 +49,6 @@ public class Main {
         AssignmentController assignmentController =new AssignmentController(assignmentRepository);
         UI ui = new UI(studentController,labProblemController,assignmentController);
         ui.run();
+         */
     }
 }

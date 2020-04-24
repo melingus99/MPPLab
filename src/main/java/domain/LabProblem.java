@@ -1,5 +1,7 @@
 package domain;
+import javax.persistence.Entity;
 
+@Entity
 public class LabProblem extends BaseEntity<Long> {
 
 
@@ -8,6 +10,10 @@ public class LabProblem extends BaseEntity<Long> {
 
     private String dueTime;
 
+
+    public LabProblem(){
+
+    }
     public LabProblem(String name,String dueTime){
         this.name=name;
         this.dueTime=dueTime;
@@ -28,7 +34,7 @@ public class LabProblem extends BaseEntity<Long> {
         this.name = name;
     }
 
-
+/*
     @Override
     public Comparable getVariable(String variable){
         switch (variable){
@@ -44,6 +50,8 @@ public class LabProblem extends BaseEntity<Long> {
         }
         return null;
     }
+
+ */
     @Override
     public String toString(){
         return "Id:"+this.getId()+", Name: "+name+", due time: "+dueTime;

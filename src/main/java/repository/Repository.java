@@ -3,6 +3,7 @@ package repository;
 import domain.BaseEntity;
 import domain.validators.ValidatorException;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -12,7 +13,7 @@ import java.util.Optional;
  * @author radu.
  *
  */
-public interface Repository<ID, T extends BaseEntity<ID>> {
+public interface Repository<ID extends Serializable, T extends BaseEntity<ID>> {
     /**
      * Find the entity with the given {@code id}.
      *

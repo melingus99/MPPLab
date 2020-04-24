@@ -5,7 +5,7 @@ import domain.Student;
 import domain.validators.StudentValidator;
 import domain.validators.Validator;
 import domain.validators.ValidatorException;
-import repository.Sort;
+//import repository.Sort;
 import repository.SortingRepository;
 
 import java.sql.*;
@@ -25,7 +25,7 @@ public class StudentDbRepository implements SortingRepository<Long, Student> {
         List<Student > students=(List<Student>) findAll();
         students.stream().forEach(student -> entities.put(student.getId(),student));
     }
-
+/*
     @Override
     public Iterable<Student> findAll(Sort sort) {
         List<Student> allEntities = (List<Student>) this.findAll();
@@ -33,6 +33,8 @@ public class StudentDbRepository implements SortingRepository<Long, Student> {
         return allEntities;
 
     }
+
+ */
 
     @Override
     public Optional<Student> findOne(Long id) {
@@ -68,7 +70,7 @@ public class StudentDbRepository implements SortingRepository<Long, Student> {
                     connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Long id = (long)resultSet.getInt("id");
+                Long id = resultSet.getLong("id");
                 String name = resultSet.getString("name");
                 Long groupNumber = (long) resultSet.getInt("groupnr");
                 Student student = new Student(name, groupNumber);

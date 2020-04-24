@@ -5,7 +5,7 @@ import domain.LabProblem;
 import domain.validators.StudentValidator;
 import domain.validators.Validator;
 import domain.validators.ValidatorException;
-import repository.Sort;
+//import repository.Sort;
 import repository.SortingRepository;
 
 import java.sql.*;
@@ -25,7 +25,7 @@ public class LabProblemsDbRepository implements SortingRepository<Long, LabProbl
         List<LabProblem> students=(List<LabProblem>) findAll();
         students.stream().forEach(labProblem -> entities.put(labProblem.getId(),labProblem));
     }
-
+/*
     @Override
     public Iterable<LabProblem> findAll(Sort sort) {
         List<LabProblem> allEntities = (List<LabProblem>) this.findAll();
@@ -33,6 +33,8 @@ public class LabProblemsDbRepository implements SortingRepository<Long, LabProbl
         return allEntities;
 
     }
+
+ */
 
     @Override
     public Optional<LabProblem> findOne(Long id) {

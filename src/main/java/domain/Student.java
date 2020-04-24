@@ -1,18 +1,25 @@
 package domain;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Student extends BaseEntity<Long> {
+
     private String name;
-    private Long group;
+    private Long groupnr;
 
 
+    public Student(){
 
-    public Student(String name, Long group){
+    }
+
+    public Student(String name, Long groupnr){
         this.name=name;
-        this.group=group;
+        this.groupnr=groupnr;
     }
     @Override
     public String toString(){
-        return "Id:"+this.getId()+", name: "+this.name+", group:"+ group.toString()+" ";
+        return "Id:"+this.getId()+", name: "+this.name+", group:"+ groupnr.toString()+" ";
     }
 
     public String getName() {
@@ -24,13 +31,14 @@ public class Student extends BaseEntity<Long> {
     }
 
     public Long getGroup() {
-        return group;
+        return groupnr;
     }
 
     public void setGroup(Long group) {
-        this.group = group;
+        this.groupnr = group;
     }
 
+    /*
     @Override
     public Comparable getVariable(String variable){
         switch (variable){
@@ -46,4 +54,5 @@ public class Student extends BaseEntity<Long> {
         }
         return null;
     }
+    */
 }
